@@ -9,6 +9,7 @@ namespace Kinderkultur_TicketinoClient.Contracts
     public interface IMergeService
     {
         Task<Token> GetTokenAsync(HttpClient client);
-        Task<IList<Organizer>> GetOrganizers(HttpClient client, string token);
+        Task<IList<Organizer>> GetOrganizers(HttpClient client);
+        Task<EventGroupInfoList> GetEventGroups(HttpClient client, string organizerId);
     }
 }

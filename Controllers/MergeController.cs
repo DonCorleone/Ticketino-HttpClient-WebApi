@@ -26,9 +26,20 @@ namespace Kinderkultur_TicketinoClient.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetAsync(){
+
             HttpClient client = new HttpClient();
+
             var token = await mergeService.GetTokenAsync(client);
-            var organizer = await mergeService.GetOrganizers(client, token.access_token);
+
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("text/plain"));       
+
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token.access_token}");
+
+            var organizer = await mergeService.GetOrganizers(client);
+            var EventGroups = await mergeService.GetEventGroups(client, organizer[0].id.ToString());
+
             return base.Ok();
         }
     }

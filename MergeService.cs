@@ -39,20 +39,26 @@ namespace Kinderkultur_TicketinoClient
             return await JsonSerializer.DeserializeAsync<Token>(await response.Content.ReadAsStreamAsync());
         }
 
-        public async Task<IList<Organizer>> GetOrganizers(HttpClient client, string token){
+        public async Task<IList<Organizer>> GetOrganizers(HttpClient client){
 
             var url = configuration.GetValue<String>("Base_URL");
             
             url = url + "/LoginUser/Organizers";
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("text/plain"));       
-
-            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
             HttpResponseMessage responseResult = client.GetAsync(url).Result;
 
             return await JsonSerializer.DeserializeAsync<IList<Organizer>>(await responseResult.Content.ReadAsStreamAsync());
+        }
+
+        public async Task<EventGroupInfoList> GetEventGroups(HttpClient client, string organizerId)
+        {        
+            var url = configuration.GetValue<String>("Base_URL");
+            
+            url = url + "/EventGroups?organizerId=" + organizerId;
+
+            HttpResponseMessage responseResult = client.GetAsync(url).Result;
+
+            return await JsonSerializer.DeserializeAsync<EventGroupInfoList>(await responseResult.Content.ReadAsStreamAsync());
         }
     }
 }
