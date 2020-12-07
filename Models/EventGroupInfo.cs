@@ -1,10 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Kinderkultur_TicketinoClient.Models
 {
     public class EventGroupInfo    {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string IddB { get; set; }
         public int id { get; set; } 
         public string name { get; set; } 
         public DateTime dateCreated { get; set; } 

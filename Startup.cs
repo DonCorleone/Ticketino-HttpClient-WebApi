@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Kinderkultur_TicketinoClient.Contracts;
+using Kinderkultur_TicketinoClient.Repositories;
+using Kinderkultur_TicketinoClient.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
 namespace Kinderkultur_TicketinoClient
@@ -28,6 +31,13 @@ namespace Kinderkultur_TicketinoClient
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.Configure<EventDatabaseSettings>(
+                Configuration.GetSection(nameof(EventDatabaseSettings)));
+
+            services.AddSingleton<IEventDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<EventDatabaseSettings>>().Value);
+    
+            services.AddSingleton<EventGroupInfoService>();
             services.AddControllers();
 
             services.AddScoped<IMergeService, MergeService>();
