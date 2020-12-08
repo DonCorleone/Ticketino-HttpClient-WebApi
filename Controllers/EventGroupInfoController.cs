@@ -70,5 +70,12 @@ namespace Kinderkultur_TicketinoClient.Controllers
 
             return NoContent();
         }
+
+        [HttpGet]
+        [Route("RemoveAll")]
+        public IActionResult RemoveAll (){
+            _eventGroupInfoService.RemoveAll();
+            return NoContent();
+        }
     }
 }

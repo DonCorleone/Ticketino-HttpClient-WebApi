@@ -1,6 +1,7 @@
 using Kinderkultur_TicketinoClient.Models;
 using Kinderkultur_TicketinoClient.Repositories;
 using Microsoft.Extensions.Configuration;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,5 +42,8 @@ namespace Kinderkultur_TicketinoClient.Services
 
         public void Remove(string id) => 
             _eventGroupInfo.DeleteOne(eventGroupInfo => eventGroupInfo.IddB == id);
+
+        public void RemoveAll() => 
+            _eventGroupInfo.DeleteMany(new BsonDocument());
     }
 }
