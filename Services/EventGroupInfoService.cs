@@ -12,32 +12,32 @@ namespace Kinderkultur_TicketinoClient.Services
     public class EventGroupInfoService
     {
 
-        private readonly IMongoCollection<EventGroupInfo> _eventGroupInfo;
+        private readonly IMongoCollection<EventGroupOverview> _eventGroupInfo;
 
         public EventGroupInfoService(IEventDatabaseSettings settings, IConfiguration configuration)
         {
             var client = new MongoClient($"mongodb://{configuration["mongodb-username"]}:{configuration["mongodb-password"]}@192.168.178.12:27017");
             var database = client.GetDatabase(settings.DatabaseName);
 
-            _eventGroupInfo = database.GetCollection<EventGroupInfo>(settings.EventGroupInfoCollectionName);
+            _eventGroupInfo = database.GetCollection<EventGroupOverview>(settings.EventGroupInfoCollectionName);
         }
 
-        public List<EventGroupInfo> Get() =>
+        public List<EventGroupOverview> Get() =>
             _eventGroupInfo.Find(eventGroupInfo => true).ToList();
 
-        public EventGroupInfo Get(string id) =>
-            _eventGroupInfo.Find<EventGroupInfo>(eventGroupInfo => eventGroupInfo.IddB == id).FirstOrDefault();
+        public EventGroupOverview Get(string id) =>
+            _eventGroupInfo.Find<EventGroupOverview>(eventGroupInfo => eventGroupInfo.IddB == id).FirstOrDefault();
 
-        public EventGroupInfo Create(EventGroupInfo eventGroupInfo)
+        public EventGroupOverview Create(EventGroupOverview eventGroupInfo)
         {
             _eventGroupInfo.InsertOne(eventGroupInfo);
             return eventGroupInfo;
         }
 
-        public void Update(string id, EventGroupInfo eventGroupInfoIn) =>
+        public void Update(string id, EventGroupOverview eventGroupInfoIn) =>
             _eventGroupInfo.ReplaceOne(eventGroupInfo => eventGroupInfo.IddB == id, eventGroupInfoIn);
 
-        public void Remove(EventGroupInfo eventGroupInfoIn) =>
+        public void Remove(EventGroupOverview eventGroupInfoIn) =>
             _eventGroupInfo.DeleteOne(eventGroupInfo => eventGroupInfo.IddB == eventGroupInfoIn.IddB);
 
         public void Remove(string id) => 

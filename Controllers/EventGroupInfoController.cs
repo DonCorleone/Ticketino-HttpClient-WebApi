@@ -17,11 +17,11 @@ namespace Kinderkultur_TicketinoClient.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<EventGroupInfo>> Get() =>
+        public ActionResult<List<EventGroupOverview>> Get() =>
             _eventGroupInfoService.Get();
 
         [HttpGet("{id:length(24)}", Name = "GetEventGroupInfo")]
-        public ActionResult<EventGroupInfo> Get(string id)
+        public ActionResult<EventGroupOverview> Get(string id)
         {
             var eventGroupInfo = _eventGroupInfoService.Get(id);
 
@@ -34,7 +34,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
         }
 
         [HttpPost]
-        public ActionResult<EventGroupInfo> Create(EventGroupInfo eventGroupInfo)
+        public ActionResult<EventGroupOverview> Create(EventGroupOverview eventGroupInfo)
         {
             _eventGroupInfoService.Create(eventGroupInfo);
 
@@ -42,7 +42,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
         }
 
         [HttpPut("{id:length(24)}")]
-        public IActionResult Update(string id, EventGroupInfo eventGroupInfoIn)
+        public IActionResult Update(string id, EventGroupOverview eventGroupInfoIn)
         {
             var eventGroupInfo = _eventGroupInfoService.Get(id);
 

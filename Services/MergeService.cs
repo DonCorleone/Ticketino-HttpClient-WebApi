@@ -48,11 +48,11 @@ namespace Kinderkultur_TicketinoClient.Services
             return await BaseUrlCaller<IList<Organizer>>.GetFromBaseUrl(configuration, client, url);
         }
 
-        public async Task<EventGroupInfoList> GetEventGroupInfos(HttpClient client, string organizerId)
+        public async Task<EventGroupOverviewList> GetEventGroupOverviews(HttpClient client, string organizerId)
         {        
             var url = "/EventGroups?organizerId=" + organizerId;
 
-            return await BaseUrlCaller<EventGroupInfoList>.GetFromBaseUrl(configuration, client, url);
+            return await BaseUrlCaller<EventGroupOverviewList>.GetFromBaseUrl(configuration, client, url);
         }
 
         public async Task<EventGroup> GetEventGroup(HttpClient client, string eventGroupId)
@@ -62,11 +62,18 @@ namespace Kinderkultur_TicketinoClient.Services
             return await BaseUrlCaller<EventGroup>.GetFromBaseUrl(configuration, client, url);
         }
 
-        public async Task<EventInfoList> GetEventInfos(HttpClient client, string eventGroupId)
+        public async Task<EventOverviewList> GetEventOverviews(HttpClient client, string eventGroupId)
         {           
             var url = $"/EventGroup/Events?eventGroupId={eventGroupId}&languageCode=de";
 
-            return await BaseUrlCaller<EventInfoList>.GetFromBaseUrl(configuration, client, url);
+            return await BaseUrlCaller<EventOverviewList>.GetFromBaseUrl(configuration, client, url);
+        }
+
+        public async Task<Event> GetEvent(HttpClient client, string eventId)
+        {        
+            var url = "/Event/" + eventId;
+
+            return await BaseUrlCaller<Event>.GetFromBaseUrl(configuration, client, url);
         }
     }
 }

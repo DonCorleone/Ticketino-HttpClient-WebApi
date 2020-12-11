@@ -38,12 +38,17 @@ namespace Kinderkultur_TicketinoClient.Controllers
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token.access_token}");
 
             var organizerz = await mergeService.GetOrganizers(client);
-            var eventGroupInfos = await mergeService.GetEventGroupInfos(client, organizerz[0].id.ToString());
+            var eventGroupInfos = await mergeService.GetEventGroupOverviews(client, organizerz[0].id.ToString());
 
             foreach (var eventGroupInfo in eventGroupInfos.eventGroups)
             {
-                var EventGroup = await mergeService.GetEventGroup(client, eventGroupInfo.id.ToString());
-                var EventInfoList = await mergeService.GetEventInfos(client, EventGroup.id.ToString());
+                var eventGroup = await mergeService.GetEventGroup(client, eventGroupInfo.id.ToString());
+                var eventInfoList = await mergeService.GetEventOverviews(client, eventGroup.id.ToString());
+
+                foreach (var eventInfo in eventInfoList.events)
+                {
+                    var eventx = await mergeService.GetEvent(client, eventInfo.id.ToString());
+                }
             }
             return base.Ok();
         }
