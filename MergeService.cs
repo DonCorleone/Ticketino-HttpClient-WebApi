@@ -60,5 +60,16 @@ namespace Kinderkultur_TicketinoClient
 
             return await JsonSerializer.DeserializeAsync<EventGroupInfoList>(await responseResult.Content.ReadAsStreamAsync());
         }
+
+        public async Task<EventGroup> GetEventGroup(HttpClient client, string eventGroupId)
+        {        
+            var url = configuration.GetValue<String>("Base_URL");
+            
+            url = url + "/EventGroup/" + eventGroupId;
+
+            HttpResponseMessage responseResult = client.GetAsync(url).Result;
+
+            return await JsonSerializer.DeserializeAsync<EventGroup>(await responseResult.Content.ReadAsStreamAsync());
+        }
     }
 }

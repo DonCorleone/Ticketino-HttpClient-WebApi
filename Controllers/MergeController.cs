@@ -40,6 +40,10 @@ namespace Kinderkultur_TicketinoClient.Controllers
             var organizerz = await mergeService.GetOrganizers(client);
             var eventGroupInfos = await mergeService.GetEventGroupInfos(client, organizerz[0].id.ToString());
 
+            foreach (var eventGroupInfo in eventGroupInfos.eventGroups)
+            {
+                var EventGroup = await mergeService.GetEventGroup(client, eventGroupInfo.id.ToString());
+            }
             return base.Ok();
         }
     }

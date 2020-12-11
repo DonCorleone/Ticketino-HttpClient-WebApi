@@ -6,7 +6,14 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Kinderkultur_TicketinoClient.Models
 {
-    public class EventGroupInfo    {
+    public class EventGroup {
+        public int id { get; set; } 
+        public int organizerId { get; set; } 
+        public string name { get; set; } 
+        public string bannerImagePath { get; set; } 
+    }
+
+    public class EventGroupInfo {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string IddB { get; set; }
