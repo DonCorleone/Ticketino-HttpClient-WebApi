@@ -8,16 +8,18 @@ using Kinderkultur_TicketinoClient.Contracts;
 using Kinderkultur_TicketinoClient.Models;
 using Microsoft.Extensions.Configuration;
 
-namespace Kinderkultur_TicketinoClient
+namespace Kinderkultur_TicketinoClient.Services
 {
     public class MergeService : IMergeService
     {
+   
         private readonly IConfiguration configuration;
 
         public MergeService(IConfiguration configuration)
         {
             this.configuration = configuration;
         }
+        
         public async Task<Token> GetTokenAsync(HttpClient client){
 
             client.DefaultRequestHeaders.Accept.Clear();
@@ -70,6 +72,13 @@ namespace Kinderkultur_TicketinoClient
             HttpResponseMessage responseResult = client.GetAsync(url).Result;
 
             return await JsonSerializer.DeserializeAsync<EventGroup>(await responseResult.Content.ReadAsStreamAsync());
+        }
+
+        public async Task<EventInfoList> GetEventInfos(HttpClient client, string eventGroupId)
+        {           
+            var url = $"/EventGroup/Events?eventGroupId={eventGroupId}&languageCode=de";
+
+            return await BaseUrlCaller<EventInfoList>.GetFromBaseUrl(configuration, client, url);
         }
     }
 }
