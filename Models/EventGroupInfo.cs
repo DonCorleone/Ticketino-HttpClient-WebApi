@@ -6,6 +6,20 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Kinderkultur_TicketinoClient.Models
 {
+    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
+    public class EventInfo    {
+        public int id { get; set; } 
+        public string name { get; set; } 
+        public DateTime start { get; set; } 
+        public bool canBeRemovedFromEventGroup { get; set; } 
+    }
+
+    public class EventInfoList    {
+        public List<EventInfo> events { get; set; } 
+        public int numberOfEvents { get; set; } 
+    }
+
+
     public class EventGroup {
         public int id { get; set; } 
         public int organizerId { get; set; } 

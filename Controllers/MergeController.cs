@@ -43,6 +43,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
             foreach (var eventGroupInfo in eventGroupInfos.eventGroups)
             {
                 var EventGroup = await mergeService.GetEventGroup(client, eventGroupInfo.id.ToString());
+                var EventInfoList = await mergeService.GetEventInfos(client, EventGroup.id.ToString());
             }
             return base.Ok();
         }
