@@ -43,35 +43,23 @@ namespace Kinderkultur_TicketinoClient.Services
 
         public async Task<IList<Organizer>> GetOrganizers(HttpClient client){
 
-            var url = configuration.GetValue<String>("Base_URL");
-            
-            url = url + "/LoginUser/Organizers";
+            var url = "/LoginUser/Organizers";
 
-            HttpResponseMessage responseResult = client.GetAsync(url).Result;
-
-            return await JsonSerializer.DeserializeAsync<IList<Organizer>>(await responseResult.Content.ReadAsStreamAsync());
+            return await BaseUrlCaller<IList<Organizer>>.GetFromBaseUrl(configuration, client, url);
         }
 
         public async Task<EventGroupInfoList> GetEventGroupInfos(HttpClient client, string organizerId)
         {        
-            var url = configuration.GetValue<String>("Base_URL");
-            
-            url = url + "/EventGroups?organizerId=" + organizerId;
+            var url = "/EventGroups?organizerId=" + organizerId;
 
-            HttpResponseMessage responseResult = client.GetAsync(url).Result;
-
-            return await JsonSerializer.DeserializeAsync<EventGroupInfoList>(await responseResult.Content.ReadAsStreamAsync());
+            return await BaseUrlCaller<EventGroupInfoList>.GetFromBaseUrl(configuration, client, url);
         }
 
         public async Task<EventGroup> GetEventGroup(HttpClient client, string eventGroupId)
         {        
-            var url = configuration.GetValue<String>("Base_URL");
-            
-            url = url + "/EventGroup/" + eventGroupId;
+            var url = "/EventGroup/" + eventGroupId;
 
-            HttpResponseMessage responseResult = client.GetAsync(url).Result;
-
-            return await JsonSerializer.DeserializeAsync<EventGroup>(await responseResult.Content.ReadAsStreamAsync());
+            return await BaseUrlCaller<EventGroup>.GetFromBaseUrl(configuration, client, url);
         }
 
         public async Task<EventInfoList> GetEventInfos(HttpClient client, string eventGroupId)
