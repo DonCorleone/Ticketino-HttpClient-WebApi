@@ -11,11 +11,11 @@ namespace Kinderkultur_TicketinoClient.Contracts
     public interface IEventGroupOverviewService
     {
         List<EventGroupOverview> Get();
-        EventGroupOverview Get(string id);
+        //  EventGroupOverview Get(string id);
         EventGroupOverview Create(EventGroupOverview eventGroupOverview);
-        void Update(string id, EventGroupOverview eventGroupOverviewIn);
-        void Remove(EventGroupOverview eventGroupOverviewIn);
-        void Remove(string id);
+        // void Update(string id, EventGroupOverview eventGroupOverviewIn);
+        // void Remove(EventGroupOverview eventGroupOverviewIn);
+        // void Remove(string id);
         void RemoveAll();
     }
 }

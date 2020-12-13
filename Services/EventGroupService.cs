@@ -10,29 +10,29 @@ using System.Linq;
 
 namespace Kinderkultur_TicketinoClient.Services
 {
-    public class EventGroupOverviewService : IEventGroupOverviewService
+    public class EventGroupService : IEventGroupService
     {
 
-        private readonly IMongoCollection<EventGroupOverview> _eventGroupOverview;
+        private readonly IMongoCollection<EventGroup> _eventGroup;
 
-        public EventGroupOverviewService(IEventDatabaseSettings settings, IConfiguration configuration)
+        public EventGroupService(IEventDatabaseSettings settings, IConfiguration configuration)
         {
             var client = new MongoClient($"mongodb://{configuration["mongodb-username"]}:{configuration["mongodb-password"]}@192.168.178.12:27017");
             var database = client.GetDatabase(settings.DatabaseName);
 
-            _eventGroupOverview = database.GetCollection<EventGroupOverview>(settings.EventGroupOverviewCollectionName);
+            _eventGroup = database.GetCollection<EventGroup>(settings.EventGroupCollectionName);
         }
 
-        public List<EventGroupOverview> Get() =>
-            _eventGroupOverview.Find(eventGroupOverview => true).ToList();
+        public List<EventGroup> Get() =>
+            _eventGroup.Find(eventGroup => true).ToList();
 
         // public EventGroupOverview Get(string id) =>
         //     _eventGroupOverview.Find<EventGroupOverview>(eventGroupOverview => eventGroupOverview.IddB == id).FirstOrDefault();
 
-        public EventGroupOverview Create(EventGroupOverview eventGroupOverview)
+        public EventGroup Create(EventGroup eventGroup)
         {
-            _eventGroupOverview.InsertOne(eventGroupOverview);
-            return eventGroupOverview;
+            _eventGroup.InsertOne(eventGroup);
+            return eventGroup;
         }
 
         // public void Update(string id, EventGroupOverview eventGroupOverviewIn) =>
@@ -45,6 +45,6 @@ namespace Kinderkultur_TicketinoClient.Services
         //     _eventGroupOverview.DeleteOne(eventGroupOverview => eventGroupOverview.IddB == id);
 
         public void RemoveAll() => 
-            _eventGroupOverview.DeleteMany(new BsonDocument());
+            _eventGroup.DeleteMany(new BsonDocument());
     }
 }

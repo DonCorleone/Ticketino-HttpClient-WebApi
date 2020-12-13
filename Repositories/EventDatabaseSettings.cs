@@ -2,14 +2,16 @@ namespace Kinderkultur_TicketinoClient.Repositories
 {
     public class EventDatabaseSettings : IEventDatabaseSettings
     {
-        public string EventGroupInfoCollectionName { get; set; }
+        public string EventGroupOverviewCollectionName { get; set; }
+        public string EventGroupCollectionName { get; set; }
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
     }
 
     public interface IEventDatabaseSettings
     {
-        string EventGroupInfoCollectionName { get; set; }
+        string EventGroupOverviewCollectionName { get; set; }
+        string EventGroupCollectionName { get; set; }
         string ConnectionString { get; set; }
         string DatabaseName { get; set; }
     }

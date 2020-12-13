@@ -21,18 +21,18 @@ namespace Kinderkultur_TicketinoClient.Controllers
         public ActionResult<List<EventGroupOverview>> Get() =>
             _eventGroupOverviewService.Get();
 
-        [HttpGet("{id:length(24)}", Name = "GetEventGroupOverview")]
-        public ActionResult<EventGroupOverview> Get(string id)
-        {
-            var eventGroupOverview = _eventGroupOverviewService.Get(id);
+        // [HttpGet("{id:length(24)}", Name = "GetEventGroupOverview")]
+        // public ActionResult<EventGroupOverview> Get(string id)
+        // {
+        //     var eventGroupOverview = _eventGroupOverviewService.Get(id);
 
-            if (eventGroupOverview == null)
-            {
-                return NotFound();
-            }
+        //     if (eventGroupOverview == null)
+        //     {
+        //         return NotFound();
+        //     }
 
-            return eventGroupOverview;
-        }
+        //     return eventGroupOverview;
+        // }
 
         [HttpPost]
         public ActionResult<EventGroupOverview> Create(EventGroupOverview eventGroupOverview)
@@ -42,35 +42,35 @@ namespace Kinderkultur_TicketinoClient.Controllers
             return CreatedAtRoute("GetEventGroupOverview", new { id = eventGroupOverview.IddB.ToString() }, eventGroupOverview);
         }
 
-        [HttpPut("{id:length(24)}")]
-        public IActionResult Update(string id, EventGroupOverview eventGroupOverviewIn)
-        {
-            var eventGroupOverview = _eventGroupOverviewService.Get(id);
+        // [HttpPut("{id:length(24)}")]
+        // public IActionResult Update(string id, EventGroupOverview eventGroupOverviewIn)
+        // {
+        //     var eventGroupOverview = _eventGroupOverviewService.Get(id);
 
-            if (eventGroupOverview == null)
-            {
-                return NotFound();
-            }
+        //     if (eventGroupOverview == null)
+        //     {
+        //         return NotFound();
+        //     }
 
-            _eventGroupOverviewService.Update(id, eventGroupOverviewIn);
+        //     _eventGroupOverviewService.Update(id, eventGroupOverviewIn);
 
-            return NoContent();
-        }
+        //     return NoContent();
+        // }
 
-        [HttpDelete("{id:length(24)}")]
-        public IActionResult Delete(string id)
-        {
-            var eventGroupOverview = _eventGroupOverviewService.Get(id);
+        // [HttpDelete("{id:length(24)}")]
+        // public IActionResult Delete(string id)
+        // {
+        //     var eventGroupOverview = _eventGroupOverviewService.Get(id);
 
-            if (eventGroupOverview == null)
-            {
-                return NotFound();
-            }
+        //     if (eventGroupOverview == null)
+        //     {
+        //         return NotFound();
+        //     }
 
-            _eventGroupOverviewService.Remove(eventGroupOverview.IddB);
+        //     _eventGroupOverviewService.Remove(eventGroupOverview.IddB);
 
-            return NoContent();
-        }
+        //     return NoContent();
+        // }
 
         [HttpGet]
         [Route("RemoveAll")]
