@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Kinderkultur_TicketinoClient.Contracts;
 using Kinderkultur_TicketinoClient.Models;
+using Kinderkultur_TicketinoClient.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
@@ -18,14 +19,17 @@ namespace Kinderkultur_TicketinoClient.Controllers
     public class MergeController : ControllerBase
     {
         private readonly IMergeService mergeService;
+        private readonly  IEventGroupOverviewService eventGroupOverviewService;
 
-        public MergeController(IMergeService mergeService)
+        public MergeController(IMergeService mergeService, IEventGroupOverviewService eventGroupOverviewService)
         {
+            this.eventGroupOverviewService = eventGroupOverviewService;
             this.mergeService = mergeService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAsync(){
+        public async Task<IActionResult> GetAsync()
+        {
 
             HttpClient client = new HttpClient();
 
@@ -33,16 +37,18 @@ namespace Kinderkultur_TicketinoClient.Controllers
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("text/plain"));       
+                new MediaTypeWithQualityHeaderValue("text/plain"));
 
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token.access_token}");
 
             var organizerz = await mergeService.GetOrganizers(client);
-            var eventGroupInfos = await mergeService.GetEventGroupOverviews(client, organizerz[0].id.ToString());
+            var eventOverviews = await mergeService.GetEventGroupOverviews(client, organizerz[0].id.ToString());
 
-            foreach (var eventGroupInfo in eventGroupInfos.eventGroups)
+            foreach (var eventGroupOverview in eventOverviews.eventGroups)
             {
-                var eventGroup = await mergeService.GetEventGroup(client, eventGroupInfo.id.ToString());
+                eventGroupOverviewService.Create(eventGroupOverview);
+                
+                var eventGroup = await mergeService.GetEventGroup(client, eventGroupOverview.id.ToString());
                 var eventInfoList = await mergeService.GetEventOverviews(client, eventGroup.id.ToString());
 
                 foreach (var eventInfo in eventInfoList.events)
