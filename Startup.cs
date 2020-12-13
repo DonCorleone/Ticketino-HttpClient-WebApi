@@ -39,6 +39,8 @@ namespace Kinderkultur_TicketinoClient
     
             services.AddSingleton<IEventGroupOverviewService,EventGroupOverviewService>();           
             services.AddSingleton<IEventGroupService,EventGroupService>();
+            services.AddSingleton<IEventOverviewService,EventOverviewService>();      
+         //   services.AddSingleton<IEventService,EventService>();
 
             services.AddControllers();
 
