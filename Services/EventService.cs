@@ -10,29 +10,29 @@ using System.Linq;
 
 namespace Kinderkultur_TicketinoClient.Services
 {
-    public class EventGroupService : IEventGroupService
+    public class EventService : IEventService
     {
 
-        private readonly IMongoCollection<EventGroup> _eventObject;
+        private readonly IMongoCollection<EventObject> _event;
 
-        public EventGroupService(IEventDatabaseSettings settings, IConfiguration configuration)
+        public EventService(IEventDatabaseSettings settings, IConfiguration configuration)
         {
             var client = new MongoClient($"mongodb://{configuration["mongodb-username"]}:{configuration["mongodb-password"]}@192.168.178.12:27017");
             var database = client.GetDatabase(settings.DatabaseName);
 
-            _eventObject = database.GetCollection<EventGroup>(settings.EventGroupCollectionName);
+            _event = database.GetCollection<EventObject>(settings.EventCollectionName);
         }
 
-        public List<EventGroup> Get() =>
-            _eventObject.Find(eventGroup => true).ToList();
+        public List<EventObject> Get() =>
+            _event.Find(eventGroup => true).ToList();
 
         // public EventGroupOverview Get(string id) =>
         //     _eventGroupOverview.Find<EventGroupOverview>(eventGroupOverview => eventGroupOverview.IddB == id).FirstOrDefault();
 
-        public EventGroup Create(EventGroup eventGroup)
+        public EventObject Create(EventObject eventObject)
         {
-            _eventObject.InsertOne(eventGroup);
-            return eventGroup;
+            _event.InsertOne(eventObject);
+            return eventObject;
         }
 
         // public void Update(string id, EventGroupOverview eventGroupOverviewIn) =>
@@ -45,6 +45,6 @@ namespace Kinderkultur_TicketinoClient.Services
         //     _eventGroupOverview.DeleteOne(eventGroupOverview => eventGroupOverview.IddB == id);
 
         public void RemoveAll() => 
-            _eventObject.DeleteMany(new BsonDocument());
+            _event.DeleteMany(new BsonDocument());
     }
 }

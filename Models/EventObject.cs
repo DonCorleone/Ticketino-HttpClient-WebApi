@@ -184,7 +184,7 @@ namespace Kinderkultur_TicketinoClient.Models
         public object eventId { get; set; } 
     }
 
-    public class Event    {
+    public class EventObject    {
         public EventDetails eventDetails { get; set; } 
         public List<int> paymentMethodGroupIds { get; set; } 
         public List<EventCalculationDefinition> eventCalculationDefinitions { get; set; } 
