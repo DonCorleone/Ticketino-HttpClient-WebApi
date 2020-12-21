@@ -21,6 +21,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
         private readonly IMergeService mergeService;
         private readonly IEventGroupOverviewService eventGroupOverviewService;
         private readonly IEventGroupService eventGroupService;
+        private readonly IEventGroupEventService eventGroupEventService;
         private readonly IEventOverviewService eventOverviewService;
         private readonly IEventService eventService;
 
@@ -28,12 +29,14 @@ namespace Kinderkultur_TicketinoClient.Controllers
             IMergeService mergeService, 
             IEventGroupOverviewService eventGroupOverviewService, 
             IEventGroupService eventGroupService,
+            IEventGroupEventService eventGroupEventService,
             IEventOverviewService eventOverviewService,
             IEventService eventService)
         {
             this.mergeService = mergeService;
             this.eventGroupOverviewService = eventGroupOverviewService;
             this.eventGroupService = eventGroupService;
+            this.eventGroupEventService = eventGroupEventService;
             this.eventOverviewService = eventOverviewService;
             this.eventService = eventService;
         }
@@ -57,6 +60,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
 
             eventGroupOverviewService.RemoveAll();
             eventGroupService.RemoveAll();
+            eventGroupEventService.RemoveAll();
             eventOverviewService.RemoveAll();
             eventService.RemoveAll();
 
@@ -69,6 +73,13 @@ namespace Kinderkultur_TicketinoClient.Controllers
                 eventGroupService.Create(eventGroup);
                 
                 var eventInfoList = await mergeService.GetEventOverviews(client, eventGroup.id.ToString());
+
+                var newEventGroupEvent = new EventGroupEvents(){
+                    events = eventInfoList.events,
+                    eventGroupId = eventGroup.id
+                };
+
+                eventGroupEventService.Create(newEventGroupEvent);
 
                 foreach (var eventInfo in eventInfoList.events)
                 {
