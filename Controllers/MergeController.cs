@@ -1,15 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Kinderkultur_TicketinoClient.Contracts;
 using Kinderkultur_TicketinoClient.Models;
-using Kinderkultur_TicketinoClient.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 namespace Kinderkultur_TicketinoClient.Controllers
 {
@@ -24,6 +18,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
         private readonly IEventGroupEventService eventGroupEventService;
         private readonly IEventOverviewService eventOverviewService;
         private readonly IEventService eventService;
+        private readonly IEventInfoService eventInfoService;
 
         public MergeController(
             IMergeService mergeService, 
@@ -31,7 +26,8 @@ namespace Kinderkultur_TicketinoClient.Controllers
             IEventGroupService eventGroupService,
             IEventGroupEventService eventGroupEventService,
             IEventOverviewService eventOverviewService,
-            IEventService eventService)
+            IEventService eventService,
+            IEventInfoService eventInfoService)
         {
             this.mergeService = mergeService;
             this.eventGroupOverviewService = eventGroupOverviewService;
@@ -39,6 +35,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
             this.eventGroupEventService = eventGroupEventService;
             this.eventOverviewService = eventOverviewService;
             this.eventService = eventService;
+            this.eventInfoService = eventInfoService;
         }
 
         [HttpGet]
@@ -61,33 +58,41 @@ namespace Kinderkultur_TicketinoClient.Controllers
             eventGroupOverviewService.RemoveAll();
             eventGroupService.RemoveAll();
             eventGroupEventService.RemoveAll();
-            eventOverviewService.RemoveAll();
-            eventService.RemoveAll();
+            eventOverviewService.RemoveAll();            
+            eventInfoService.RemoveAll();
+            eventService.RemoveAll();       
+            eventInfoService.RemoveAll();
 
             foreach (var eventGroupOverview in eventOverviews.eventGroups)
             {
                 eventGroupOverviewService.Create(eventGroupOverview);
                 
-                var eventGroup = await mergeService.GetEventGroup(client, eventGroupOverview.id.ToString());
+                EventGroup eventGroup = await mergeService.GetEventGroup(client, eventGroupOverview.id.ToString());
 
                 eventGroupService.Create(eventGroup);
                 
-                var eventInfoList = await mergeService.GetEventOverviews(client, eventGroup.id.ToString());
+                EventOverviewList eventOverviewList = await mergeService.GetEventOverviews(client, eventGroup.id.ToString());
 
-                var newEventGroupEvent = new EventGroupEvents(){
-                    events = eventInfoList.events,
+                EventGroupEvents newEventGroupEvent = new EventGroupEvents(){
+                    events = eventOverviewList.events,
                     eventGroupId = eventGroup.id
                 };
 
                 eventGroupEventService.Create(newEventGroupEvent);
 
-                foreach (var eventInfo in eventInfoList.events)
+                foreach (var eventOverview in eventOverviewList.events)
                 {
-                    eventOverviewService.Create(eventInfo);
+                    eventOverviewService.Create(eventOverview);
 
-                    var eventObject = await mergeService.GetEvent(client, eventInfo.id.ToString());
+                    EventObject eventObject = await mergeService.GetEvent(client, eventOverview.id.ToString());
 
                     eventService.Create(eventObject);
+
+                    EventInfos eventInfos = await mergeService.GetEventInfos(client, eventOverview.id.ToString());
+
+                    EventInfo eventInfo = eventInfos.eventInfos[0];
+
+                    eventInfoService.Create(eventInfo);
                 }
             }
             return base.Ok();

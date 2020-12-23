@@ -7,6 +7,7 @@ namespace Kinderkultur_TicketinoClient.Repositories
         public string EventOverviewCollectionName { get; set; }
         public string EventGroupEventCollectionName { get; set; }
         public string EventCollectionName { get; set; }
+        public string EventInfoCollectionName { get; set; }
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
     }
@@ -18,6 +19,7 @@ namespace Kinderkultur_TicketinoClient.Repositories
         string EventOverviewCollectionName { get; set; }
         string EventGroupEventCollectionName { get; set; }
         string EventCollectionName { get; set; }
+        string EventInfoCollectionName { get; set; }
         string ConnectionString { get; set; }
         string DatabaseName { get; set; }
     }

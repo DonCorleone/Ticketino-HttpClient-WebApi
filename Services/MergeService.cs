@@ -75,5 +75,12 @@ namespace Kinderkultur_TicketinoClient.Services
 
             return await BaseUrlCaller<EventObject>.GetFromBaseUrl(configuration, client, url);
         }
+
+        public async Task<EventInfos> GetEventInfos(HttpClient client, string eventId)
+        {
+            var url = $"/Event/{eventId}/EventInfos";
+
+            return await BaseUrlCaller<EventInfos>.GetFromBaseUrl(configuration, client, url);
+        }
     }
 }

@@ -8,10 +8,10 @@ using System.Linq;
 
 namespace Kinderkultur_TicketinoClient.Contracts
 {
-    public interface IEventService
+    public interface IEventInfoService
     {
-        List<EventObject> Get();
-        EventObject Create(EventObject eventObject);
+        List<EventInfo> Get();
+        EventInfo Create(EventInfo eventInfo);
         void RemoveAll();
     }
 }

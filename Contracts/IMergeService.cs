@@ -14,5 +14,6 @@ namespace Kinderkultur_TicketinoClient.Contracts
         Task<EventGroup> GetEventGroup(HttpClient client, string eventGroupId);
         Task<EventOverviewList> GetEventOverviews(HttpClient client, string eventGroupId);
         Task<EventObject> GetEvent(HttpClient client, string eventId);
+        Task<EventInfos> GetEventInfos(HttpClient client, string eventId);
     }
 }
