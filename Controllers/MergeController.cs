@@ -19,6 +19,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
         private readonly IEventOverviewService eventOverviewService;
         private readonly IEventService eventService;
         private readonly IEventInfoService eventInfoService;
+        private readonly IEventDetailsService eventDetailsService;
 
         public MergeController(
             IMergeService mergeService, 
@@ -27,7 +28,8 @@ namespace Kinderkultur_TicketinoClient.Controllers
             IEventGroupEventService eventGroupEventService,
             IEventOverviewService eventOverviewService,
             IEventService eventService,
-            IEventInfoService eventInfoService)
+            IEventInfoService eventInfoService,
+            IEventDetailsService eventDetailsService)
         {
             this.mergeService = mergeService;
             this.eventGroupOverviewService = eventGroupOverviewService;
@@ -36,6 +38,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
             this.eventOverviewService = eventOverviewService;
             this.eventService = eventService;
             this.eventInfoService = eventInfoService;
+            this.eventDetailsService = eventDetailsService;
         }
 
         [HttpGet]
@@ -62,6 +65,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
             eventInfoService.RemoveAll();
             eventService.RemoveAll();       
             eventInfoService.RemoveAll();
+            eventDetailsService.RemoveAll();
 
             foreach (var eventGroupOverview in eventOverviews.eventGroups)
             {
@@ -86,7 +90,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
 
                     EventObject eventObject = await mergeService.GetEvent(client, eventOverview.id.ToString());
 
-                    eventService.Create(eventObject);
+                    eventDetailsService.Create(eventObject.eventDetails);
 
                     EventInfos eventInfos = await mergeService.GetEventInfos(client, eventOverview.id.ToString());
 

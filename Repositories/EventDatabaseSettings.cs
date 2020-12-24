@@ -10,6 +10,7 @@ namespace Kinderkultur_TicketinoClient.Repositories
         public string EventInfoCollectionName { get; set; }
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
+        public string EventDetailsCollectionName { get; set; }
     }
 
     public interface IEventDatabaseSettings
@@ -22,5 +23,6 @@ namespace Kinderkultur_TicketinoClient.Repositories
         string EventInfoCollectionName { get; set; }
         string ConnectionString { get; set; }
         string DatabaseName { get; set; }
+        string EventDetailsCollectionName { get; set; }
     }
 }

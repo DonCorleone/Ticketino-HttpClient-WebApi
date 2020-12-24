@@ -10,31 +10,31 @@ using System.Linq;
 
 namespace Kinderkultur_TicketinoClient.Services
 {
-    public class EventService : IEventService
+    public class EventDetailsService : IEventDetailsService
     {
 
-        private readonly IMongoCollection<EventObject> _event;
+        private readonly IMongoCollection<EventDetails> _event;
 
-        public EventService(IEventDatabaseSettings settings, IConfiguration configuration)
+        public EventDetailsService(IEventDatabaseSettings settings, IConfiguration configuration)
         {
             // local var client = new MongoClient($"mongodb://{configuration["mongodb-username"]}:{configuration["mongodb-password"]}@192.168.178.12:27017");
             var client = new MongoClient($"mongodb+srv://ticketinoClient:9sdQuDmQwnvbla4j@cluster0.x3l7f.mongodb.net/{settings.DatabaseName}?retryWrites=true&w=majority");
          
             var database = client.GetDatabase(settings.DatabaseName);
 
-            _event = database.GetCollection<EventObject>(settings.EventCollectionName);
+            _event = database.GetCollection<EventDetails>(settings.EventDetailsCollectionName);
         }
 
-        public List<EventObject> Get() =>
-            _event.Find(eventObject => true).ToList();
+        public List<EventDetails> Get() =>
+            _event.Find(eventDetails => true).ToList();
 
         // public EventGroupOverview Get(string id) =>
         //     _eventGroupOverview.Find<EventGroupOverview>(eventGroupOverview => eventGroupOverview.IddB == id).FirstOrDefault();
 
-        public EventObject Create(EventObject eventObject)
+        public EventDetails Create(EventDetails eventDetails)
         {
-            _event.InsertOne(eventObject);
-            return eventObject;
+            _event.InsertOne(eventDetails);
+            return eventDetails;
         }
 
         // public void Update(string id, EventGroupOverview eventGroupOverviewIn) =>

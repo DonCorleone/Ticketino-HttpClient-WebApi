@@ -143,7 +143,7 @@ namespace Kinderkultur_TicketinoClient.Models
         public bool isBankInternalEvent { get; set; } 
         public object externalEventCode { get; set; } 
         public int forceEmptySeats { get; set; } 
-        public List<EventOverview> eventInfos { get; set; } 
+        public List<EventInfo> eventInfos { get; set; } 
         public List<TicketType> ticketTypes { get; set; } 
     }
 
