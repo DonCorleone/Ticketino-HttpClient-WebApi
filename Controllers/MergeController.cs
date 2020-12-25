@@ -94,7 +94,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
 
                     EventInfos eventInfos = await mergeService.GetEventInfos(client, eventOverview.id.ToString());
 
-                    EventInfo eventInfo = eventInfos.eventInfos[0];
+                    EventInfo eventInfo = eventInfos.eventInfos.Find(p => p.languageIsoCode == "de");
 
                     eventInfoService.Create(eventInfo);
                 }
