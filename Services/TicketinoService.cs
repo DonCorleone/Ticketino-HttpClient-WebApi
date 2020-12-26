@@ -10,12 +10,12 @@ using Microsoft.Extensions.Configuration;
 
 namespace Kinderkultur_TicketinoClient.Services
 {
-    public class MergeService : IMergeService
+    public class TicketinoService : ITicketinoService
     {
    
         private readonly IConfiguration configuration;
 
-        public MergeService(IConfiguration configuration)
+        public TicketinoService(IConfiguration configuration)
         {
             this.configuration = configuration;
         }

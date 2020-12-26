@@ -47,7 +47,7 @@ namespace Kinderkultur_TicketinoClient
 
             services.AddControllers();
 
-            services.AddScoped<IMergeService, MergeService>();
+            services.AddScoped<ITicketinoService, TicketinoService>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Kinderkultur_TicketinoClient", Version = "v1" });

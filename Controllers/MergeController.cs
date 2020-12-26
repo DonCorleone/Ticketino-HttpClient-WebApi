@@ -12,7 +12,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
     [Route("[controller]")]
     public class MergeController : ControllerBase
     {
-        private readonly IMergeService mergeService;
+        private readonly ITicketinoService ticketinoService;
         private readonly IEventGroupOverviewService eventGroupOverviewService;
         private readonly IEventGroupService eventGroupService;
         private readonly IEventGroupEventService eventGroupEventService;
@@ -22,7 +22,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
         private readonly IEventDetailsService eventDetailsService;
 
         public MergeController(
-            IMergeService mergeService, 
+            ITicketinoService ticketinoService, 
             IEventGroupOverviewService eventGroupOverviewService, 
             IEventGroupService eventGroupService,
             IEventGroupEventService eventGroupEventService,
@@ -31,7 +31,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
             IEventInfoService eventInfoService,
             IEventDetailsService eventDetailsService)
         {
-            this.mergeService = mergeService;
+            this.ticketinoService = ticketinoService;
             this.eventGroupOverviewService = eventGroupOverviewService;
             this.eventGroupService = eventGroupService;
             this.eventGroupEventService = eventGroupEventService;
@@ -47,7 +47,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
 
             HttpClient client = new HttpClient();
 
-            var token = await mergeService.GetTokenAsync(client);
+            var token = await ticketinoService.GetTokenAsync(client);
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
@@ -55,8 +55,8 @@ namespace Kinderkultur_TicketinoClient.Controllers
 
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token.access_token}");
 
-            var organizerz = await mergeService.GetOrganizers(client);
-            var eventOverviews = await mergeService.GetEventGroupOverviews(client, organizerz[0].id.ToString());
+            var organizerz = await ticketinoService.GetOrganizers(client);
+            var eventOverviews = await ticketinoService.GetEventGroupOverviews(client, organizerz[0].id.ToString());
 
             eventGroupOverviewService.RemoveAll();
             eventGroupService.RemoveAll();
@@ -71,11 +71,11 @@ namespace Kinderkultur_TicketinoClient.Controllers
             {
                 eventGroupOverviewService.Create(eventGroupOverview);
                 
-                EventGroup eventGroup = await mergeService.GetEventGroup(client, eventGroupOverview.id.ToString());
+                EventGroup eventGroup = await ticketinoService.GetEventGroup(client, eventGroupOverview.id.ToString());
 
                 eventGroupService.Create(eventGroup);
                 
-                EventOverviewList eventOverviewList = await mergeService.GetEventOverviews(client, eventGroup.id.ToString());
+                EventOverviewList eventOverviewList = await ticketinoService.GetEventOverviews(client, eventGroup.id.ToString());
 
                 EventGroupEvents newEventGroupEvent = new EventGroupEvents(){
                     events = eventOverviewList.events,
@@ -88,11 +88,11 @@ namespace Kinderkultur_TicketinoClient.Controllers
                 {
                     eventOverviewService.Create(eventOverview);
 
-                    EventObject eventObject = await mergeService.GetEvent(client, eventOverview.id.ToString());
+                    EventObject eventObject = await ticketinoService.GetEvent(client, eventOverview.id.ToString());
 
                     eventObject.eventDetails.eventInfos.Clear();
 
-                    EventInfos eventInfos = await mergeService.GetEventInfos(client, eventOverview.id.ToString());
+                    EventInfos eventInfos = await ticketinoService.GetEventInfos(client, eventOverview.id.ToString());
                     EventInfo eventInfo = eventInfos.eventInfos.Find(p => p.languageIsoCode == "de");
                     
                     eventObject.eventDetails.eventInfos.Add(eventInfo);

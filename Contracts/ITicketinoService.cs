@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Kinderkultur_TicketinoClient.Contracts
 {
-    public interface IMergeService
+    public interface ITicketinoService
     {
         Task<Token> GetTokenAsync(HttpClient client);
         Task<IList<Organizer>> GetOrganizers(HttpClient client);
