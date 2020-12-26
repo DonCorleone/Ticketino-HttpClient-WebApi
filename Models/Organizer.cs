@@ -1,7 +1,10 @@
+using System.Text.Json.Serialization;
+
 namespace Kinderkultur_TicketinoClient.Models
 {
     public class Organizer
     {
+        [JsonConverter(typeof(StringConverter))]
         public string organizerName { get; set; } 
         public int id { get; set; } 
         public int addressId { get; set; } 

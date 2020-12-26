@@ -90,12 +90,13 @@ namespace Kinderkultur_TicketinoClient.Controllers
 
                     EventObject eventObject = await mergeService.GetEvent(client, eventOverview.id.ToString());
 
-                    eventDetailsService.Create(eventObject.eventDetails);
+                    eventObject.eventDetails.eventInfos.Clear();
 
                     EventInfos eventInfos = await mergeService.GetEventInfos(client, eventOverview.id.ToString());
-
                     EventInfo eventInfo = eventInfos.eventInfos.Find(p => p.languageIsoCode == "de");
-
+                    
+                    eventObject.eventDetails.eventInfos.Add(eventInfo);
+                    eventDetailsService.Create(eventObject.eventDetails);
                     eventInfoService.Create(eventInfo);
                 }
             }
