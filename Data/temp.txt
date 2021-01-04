@@ -1,0 +1,5 @@
+
+canBeRemovedFromEventGroup [bool]:true
+id [int]:121240
+name [string]:"Das Drachenei"
+start [DateTime]:{08/01/2008 15:00:00}

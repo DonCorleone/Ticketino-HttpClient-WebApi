@@ -11,7 +11,10 @@ namespace Kinderkultur_TicketinoClient.Contracts
     public interface IEventDetailsService
     {
         List<EventDetails> Get();
+        EventDetails Get(int id);
         EventDetails Create(EventDetails eventDetails);
+        void Update(int id, EventDetails eventDetailsIn);
+        void Upsert(int id, EventDetails eventDetailsIn);
         void RemoveAll();
     }
 }

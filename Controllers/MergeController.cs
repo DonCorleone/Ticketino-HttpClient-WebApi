@@ -86,7 +86,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
 
                 foreach (var eventOverview in eventOverviewList.events)
                 {
-                    eventOverviewService.Create(eventOverview);
+                    eventOverviewService.Upsert(eventOverview.id, eventOverview);
 
                     EventObject eventObject = await ticketinoService.GetEvent(client, eventOverview.id.ToString());
 
@@ -96,8 +96,8 @@ namespace Kinderkultur_TicketinoClient.Controllers
                     EventInfo eventInfo = eventInfos.eventInfos.Find(p => p.languageIsoCode == "de");
                     
                     eventObject.eventDetails.eventInfos.Add(eventInfo);
-                    eventDetailsService.Create(eventObject.eventDetails);
-                    eventInfoService.Create(eventInfo);
+                    eventDetailsService.Upsert(eventObject.eventDetails.id, eventObject.eventDetails);
+                    eventInfoService.Upsert(eventInfo.id, eventInfo);
                 }
             }
             return base.Ok();

@@ -37,8 +37,8 @@ namespace Kinderkultur_TicketinoClient.Services
             return eventGroupOverview;
         }
 
-        // public void Update(string id, EventGroupOverview eventGroupOverviewIn) =>
-        //     _eventGroupOverview.ReplaceOne(eventGroupOverview => eventGroupOverview.IddB == id, eventGroupOverviewIn);
+        public void Update(string id, EventGroupOverview eventGroupOverviewIn) =>
+            _eventGroupOverview.ReplaceOne(eventGroupOverview => eventGroupOverview.IddB == id, eventGroupOverviewIn);
 
         // public void Remove(EventGroupOverview eventGroupOverviewIn) =>
         //     _eventGroupOverview.DeleteOne(eventGroupOverview => eventGroupOverview.IddB == eventGroupOverviewIn.IddB);

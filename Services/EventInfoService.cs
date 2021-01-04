@@ -29,17 +29,26 @@ namespace Kinderkultur_TicketinoClient.Services
         public List<EventInfo> Get() =>
             _eventInfo.Find(eventInfo => true).ToList();
 
-        // public EventGroupOverview Get(string id) =>
-        //     _eventGroupOverview.Find<EventGroupOverview>(eventGroupOverview => eventGroupOverview.IddB == id).FirstOrDefault();
+        public EventInfo Get(int id) =>
+            _eventInfo.Find<EventInfo>(eventInfo => eventInfo.id == id).FirstOrDefault();
 
         public EventInfo Create(EventInfo eventInfo)
         {
             _eventInfo.InsertOne(eventInfo);
             return eventInfo;
         }
+        public void Update(int id, EventInfo eventInfoIn) =>
+            _eventInfo.ReplaceOne(eventInfo => eventInfo.id == id, eventInfoIn, new ReplaceOptions(){ IsUpsert = true });
 
-        // public void Update(string id, EventGroupOverview eventGroupOverviewIn) =>
-        //     _eventGroupOverview.ReplaceOne(eventGroupOverview => eventGroupOverview.IddB == id, eventGroupOverviewIn);
+        public void Upsert(int id, EventInfo eventInfoIn){
+            
+            var found = this.Get(id);
+            if (found != null){
+                this.Update(id, eventInfoIn);
+            }else{
+                this.Create(eventInfoIn);
+            }
+        }
 
         // public void Remove(EventGroupOverview eventGroupOverviewIn) =>
         //     _eventGroupOverview.DeleteOne(eventGroupOverview => eventGroupOverview.IddB == eventGroupOverviewIn.IddB);

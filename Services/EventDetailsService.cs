@@ -28,8 +28,8 @@ namespace Kinderkultur_TicketinoClient.Services
         public List<EventDetails> Get() =>
             _event.Find(eventDetails => true).ToList();
 
-        // public EventGroupOverview Get(string id) =>
-        //     _eventGroupOverview.Find<EventGroupOverview>(eventGroupOverview => eventGroupOverview.IddB == id).FirstOrDefault();
+        public EventDetails Get(int id) =>
+            _event.Find<EventDetails>(eventDetails => eventDetails.id == id).FirstOrDefault();
 
         public EventDetails Create(EventDetails eventDetails)
         {
@@ -37,9 +37,20 @@ namespace Kinderkultur_TicketinoClient.Services
             return eventDetails;
         }
 
-        // public void Update(string id, EventGroupOverview eventGroupOverviewIn) =>
-        //     _eventGroupOverview.ReplaceOne(eventGroupOverview => eventGroupOverview.IddB == id, eventGroupOverviewIn);
+        public void Update(int id, EventDetails eventDetailsIn) =>
+            _event.ReplaceOne(eventOverview => eventOverview.id == id, eventDetailsIn, new ReplaceOptions(){
+                IsUpsert = true
+            });
 
+        public void Upsert(int id, EventDetails eventDetailsIn){
+            
+            var found = this.Get(id);
+            if (found != null){
+                this.Update(id, eventDetailsIn);
+            }else{
+                this.Create(eventDetailsIn);
+            }
+        }
         // public void Remove(EventGroupOverview eventGroupOverviewIn) =>
         //     _eventGroupOverview.DeleteOne(eventGroupOverview => eventGroupOverview.IddB == eventGroupOverviewIn.IddB);
 
