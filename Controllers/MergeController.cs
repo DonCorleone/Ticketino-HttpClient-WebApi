@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
         private readonly IEventGroupOverviewService eventGroupOverviewService;
         private readonly IEventGroupService eventGroupService;
         private readonly IEventGroupEventService eventGroupEventService;
+        private readonly IEventGroupEventDetailService eventGroupEventDetailService;
         private readonly IEventOverviewService eventOverviewService;
         private readonly IEventService eventService;
         private readonly IEventInfoService eventInfoService;
@@ -26,6 +28,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
             IEventGroupOverviewService eventGroupOverviewService, 
             IEventGroupService eventGroupService,
             IEventGroupEventService eventGroupEventService,
+            IEventGroupEventDetailService eventGroupEventDetailService,
             IEventOverviewService eventOverviewService,
             IEventService eventService,
             IEventInfoService eventInfoService,
@@ -35,6 +38,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
             this.eventGroupOverviewService = eventGroupOverviewService;
             this.eventGroupService = eventGroupService;
             this.eventGroupEventService = eventGroupEventService;
+            this.eventGroupEventDetailService = eventGroupEventDetailService;
             this.eventOverviewService = eventOverviewService;
             this.eventService = eventService;
             this.eventInfoService = eventInfoService;
@@ -61,6 +65,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
             eventGroupOverviewService.RemoveAll();
             eventGroupService.RemoveAll();
             eventGroupEventService.RemoveAll();
+            eventGroupEventDetailService.RemoveAll();
             eventOverviewService.RemoveAll();            
             eventInfoService.RemoveAll();
             eventService.RemoveAll();       
@@ -84,6 +89,8 @@ namespace Kinderkultur_TicketinoClient.Controllers
 
                 eventGroupEventService.Create(newEventGroupEvent);
 
+                var eventDetails = new List<EventDetails>();
+
                 foreach (var eventOverview in eventOverviewList.events)
                 {
                     eventOverviewService.Upsert(eventOverview.id, eventOverview);
@@ -96,9 +103,17 @@ namespace Kinderkultur_TicketinoClient.Controllers
                     EventInfo eventInfo = eventInfos.eventInfos.Find(p => p.languageIsoCode == "de");
                     
                     eventObject.eventDetails.eventInfos.Add(eventInfo);
+                    eventDetails.Add(eventObject.eventDetails); 
                     eventDetailsService.Upsert(eventObject.eventDetails.id, eventObject.eventDetails);
                     eventInfoService.Upsert(eventInfo.id, eventInfo);
                 }
+
+                var newEventGroupEventDetail = new EventGroupEventDetails(){
+                    eventGroupId = eventGroup.id,
+                    events = eventDetails
+                };
+
+                eventGroupEventDetailService.Create(newEventGroupEventDetail);
             }
             return base.Ok();
         }
