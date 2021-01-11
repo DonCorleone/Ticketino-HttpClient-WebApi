@@ -22,4 +22,14 @@ namespace Kinderkultur_TicketinoClient.Models
         public int eventGroupId { get; set; } 
         public List<EventDetails> events { get; set; }
     }
+
+    public class EventEventGroupUsage
+    {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string IddB { get; set; }
+        public int eventId { get; set; } 
+        public int eventGroupId { get; set; } 
+        public string usage{ get; set; }
+    }
 }

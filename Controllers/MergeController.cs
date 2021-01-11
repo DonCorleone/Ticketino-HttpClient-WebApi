@@ -17,6 +17,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
         private readonly IEventGroupOverviewService eventGroupOverviewService;
         private readonly IEventGroupService eventGroupService;
         private readonly IEventGroupEventService eventGroupEventService;
+        private readonly IEventEventGroupUsageService eventEventGroupUsageService;
         private readonly IEventGroupEventDetailService eventGroupEventDetailService;
         private readonly IEventOverviewService eventOverviewService;
         private readonly IEventService eventService;
@@ -28,6 +29,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
             IEventGroupOverviewService eventGroupOverviewService, 
             IEventGroupService eventGroupService,
             IEventGroupEventService eventGroupEventService,
+            IEventEventGroupUsageService eventEventGroupUsageService,
             IEventGroupEventDetailService eventGroupEventDetailService,
             IEventOverviewService eventOverviewService,
             IEventService eventService,
@@ -38,6 +40,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
             this.eventGroupOverviewService = eventGroupOverviewService;
             this.eventGroupService = eventGroupService;
             this.eventGroupEventService = eventGroupEventService;
+            this.eventEventGroupUsageService = eventEventGroupUsageService;
             this.eventGroupEventDetailService = eventGroupEventDetailService;
             this.eventOverviewService = eventOverviewService;
             this.eventService = eventService;
@@ -61,10 +64,11 @@ namespace Kinderkultur_TicketinoClient.Controllers
 
             var organizerz = await ticketinoService.GetOrganizers(client);
             var eventOverviews = await ticketinoService.GetEventGroupOverviews(client, organizerz[0].id.ToString());
-
+         
             eventGroupOverviewService.RemoveAll();
             eventGroupService.RemoveAll();
             eventGroupEventService.RemoveAll();
+            eventEventGroupUsageService.RemoveAll();
             eventGroupEventDetailService.RemoveAll();
             eventOverviewService.RemoveAll();            
             eventInfoService.RemoveAll();
@@ -104,6 +108,27 @@ namespace Kinderkultur_TicketinoClient.Controllers
                     
                     eventObject.eventDetails.eventInfos.Add(eventInfo);
                     eventDetails.Add(eventObject.eventDetails); 
+
+                    if(eventObject.eventDetails.facebookPixelId != ""){
+                        var eventGroupUsage = new EventEventGroupUsage(){
+                            eventId = eventObject.eventDetails.id,
+                            eventGroupId = eventGroup.id,
+                            usage = eventObject.eventDetails.facebookPixelId
+                        };
+
+                        eventEventGroupUsageService.Create(eventGroupUsage);
+                    }
+
+                    if(eventObject.eventDetails.googleAnalyticsTracker != ""){
+                        var eventGroupUsage = new EventEventGroupUsage(){
+                            eventId = eventObject.eventDetails.id,
+                            eventGroupId = eventGroup.id,
+                            usage = eventObject.eventDetails.googleAnalyticsTracker
+                        };
+
+                        eventEventGroupUsageService.Create(eventGroupUsage);
+                    }
+
                     eventDetailsService.Upsert(eventObject.eventDetails.id, eventObject.eventDetails);
                     eventInfoService.Upsert(eventInfo.id, eventInfo);
                 }

@@ -1,18 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Kinderkultur_TicketinoClient.Contracts;
 using Kinderkultur_TicketinoClient.Repositories;
 using Kinderkultur_TicketinoClient.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
@@ -39,7 +32,8 @@ namespace Kinderkultur_TicketinoClient
     
             services.AddSingleton<IEventGroupOverviewService, EventGroupOverviewService>();           
             services.AddSingleton<IEventGroupService, EventGroupService>();
-            services.AddSingleton<IEventGroupEventService, EventGroupEventService>();    
+            services.AddSingleton<IEventGroupEventService, EventGroupEventService>();   
+            services.AddSingleton<IEventEventGroupUsageService, EventEventGroupUsageService>();   
             services.AddSingleton<IEventGroupEventDetailService, EventGroupEventDetailService>();  
             services.AddSingleton<IEventOverviewService, EventOverviewService>();        
             services.AddSingleton<IEventService, EventService>();          
