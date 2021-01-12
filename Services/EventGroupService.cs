@@ -13,7 +13,7 @@ namespace Kinderkultur_TicketinoClient.Services
     public class EventGroupService : IEventGroupService
     {
 
-        private readonly IMongoCollection<EventGroup> _eventObject;
+        private readonly IMongoCollection<EventGroup> _eventGroup;
 
         public EventGroupService(IEventDatabaseSettings settings, IConfiguration configuration)
         {
@@ -22,31 +22,35 @@ namespace Kinderkultur_TicketinoClient.Services
             
             var database = client.GetDatabase(settings.DatabaseName);
 
-            _eventObject = database.GetCollection<EventGroup>(settings.EventGroupCollectionName);
+            _eventGroup = database.GetCollection<EventGroup>(settings.EventGroupCollectionName);
         }
 
         public List<EventGroup> Get() =>
-            _eventObject.Find(eventGroup => true).ToList();
-
-        // public EventGroupOverview Get(string id) =>
-        //     _eventGroupOverview.Find<EventGroupOverview>(eventGroupOverview => eventGroupOverview.IddB == id).FirstOrDefault();
+            _eventGroup.Find(eventGroup => true).ToList();
 
         public EventGroup Create(EventGroup eventGroup)
         {
-            _eventObject.InsertOne(eventGroup);
+            _eventGroup.InsertOne(eventGroup);
             return eventGroup;
         }
 
-        // public void Update(string id, EventGroupOverview eventGroupOverviewIn) =>
-        //     _eventGroupOverview.ReplaceOne(eventGroupOverview => eventGroupOverview.IddB == id, eventGroupOverviewIn);
+        public EventGroup Get(int id) =>
+            _eventGroup.Find<EventGroup>(eventGroup => eventGroup.id == id).FirstOrDefault();
 
-        // public void Remove(EventGroupOverview eventGroupOverviewIn) =>
-        //     _eventGroupOverview.DeleteOne(eventGroupOverview => eventGroupOverview.IddB == eventGroupOverviewIn.IddB);
-
-        // public void Remove(string id) => 
-        //     _eventGroupOverview.DeleteOne(eventGroupOverview => eventGroupOverview.IddB == id);
-
+        public void Update(int id, EventGroup eventGroupIn) =>
+            _eventGroup.ReplaceOne(eventGroup => eventGroup.id == id, eventGroupIn, new ReplaceOptions(){
+                IsUpsert = true
+            });
+ 
+        public void Upsert(int id, EventGroup eventGroupIn){
+            var found = this.Get(id);
+            if (found != null){
+                this.Update(id, eventGroupIn);
+            }else{
+                this.Create(eventGroupIn);
+            }
+        }
         public void RemoveAll() => 
-            _eventObject.DeleteMany(new BsonDocument());
+            _eventGroup.DeleteMany(new BsonDocument());
     }
 }

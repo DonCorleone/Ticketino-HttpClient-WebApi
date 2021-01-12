@@ -10,8 +10,11 @@ namespace Kinderkultur_TicketinoClient.Contracts
 {
     public interface IEventGroupService
     {
-        List<EventGroup> Get();
         EventGroup Create(EventGroup eventGroup);
+        List<EventGroup> Get();
+        EventGroup Get(int id);
+        void Update(int id, EventGroup eventGroupIn);
+        void Upsert(int id, EventGroup eventGroupIn);
         void RemoveAll();
     }
 }
