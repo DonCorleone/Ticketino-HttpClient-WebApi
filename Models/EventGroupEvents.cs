@@ -13,16 +13,6 @@ namespace Kinderkultur_TicketinoClient.Models
         public List<EventOverview> events { get; set; }
     }
 
-
-    public class EventGroupEventDetails
-    {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string IddB { get; set; }
-        public int eventGroupId { get; set; } 
-        public List<EventDetails> events { get; set; }
-    }
-
     public class EventEventGroupUsage
     {
         [BsonId]

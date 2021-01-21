@@ -14,11 +14,9 @@ namespace Kinderkultur_TicketinoClient.Controllers
     public class MergeController : ControllerBase
     {
         private readonly ITicketinoService ticketinoService;
-        private readonly IEventGroupOverviewService eventGroupOverviewService;
         private readonly IEventGroupService eventGroupService;
         private readonly IEventGroupEventService eventGroupEventService;
         private readonly IEventEventGroupUsageService eventEventGroupUsageService;
-        private readonly IEventGroupEventDetailService eventGroupEventDetailService;
         private readonly IEventOverviewService eventOverviewService;
         private readonly IEventService eventService;
         private readonly IEventInfoService eventInfoService;
@@ -26,22 +24,18 @@ namespace Kinderkultur_TicketinoClient.Controllers
 
         public MergeController(
             ITicketinoService ticketinoService, 
-            IEventGroupOverviewService eventGroupOverviewService, 
             IEventGroupService eventGroupService,
             IEventGroupEventService eventGroupEventService,
             IEventEventGroupUsageService eventEventGroupUsageService,
-            IEventGroupEventDetailService eventGroupEventDetailService,
             IEventOverviewService eventOverviewService,
             IEventService eventService,
             IEventInfoService eventInfoService,
             IEventDetailsService eventDetailsService)
         {
             this.ticketinoService = ticketinoService;
-            this.eventGroupOverviewService = eventGroupOverviewService;
             this.eventGroupService = eventGroupService;
             this.eventGroupEventService = eventGroupEventService;
             this.eventEventGroupUsageService = eventEventGroupUsageService;
-            this.eventGroupEventDetailService = eventGroupEventDetailService;
             this.eventOverviewService = eventOverviewService;
             this.eventService = eventService;
             this.eventInfoService = eventInfoService;
@@ -64,21 +58,18 @@ namespace Kinderkultur_TicketinoClient.Controllers
 
             var organizerz = await ticketinoService.GetOrganizers(client);
             var eventOverviews = await ticketinoService.GetEventGroupOverviews(client, organizerz[0].id.ToString());
-         
-            eventGroupOverviewService.RemoveAll();
+             
             eventGroupService.RemoveAll();
             eventGroupEventService.RemoveAll();
             eventEventGroupUsageService.RemoveAll();
-            eventGroupEventDetailService.RemoveAll();
-            eventOverviewService.RemoveAll();            
-            eventInfoService.RemoveAll();
-            eventService.RemoveAll();       
+            eventOverviewService.RemoveAll();        
+            eventService.RemoveAll();           
+                    
             eventInfoService.RemoveAll();
             eventDetailsService.RemoveAll();
 
             foreach (var eventGroupOverview in eventOverviews.eventGroups)
             {
-                eventGroupOverviewService.Create(eventGroupOverview);
                 
                 EventGroup eventGroup = await ticketinoService.GetEventGroup(client, eventGroupOverview.id.ToString());
 
@@ -104,7 +95,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
                     eventObject.eventDetails.eventInfos.Clear();
 
                     EventInfos eventInfos = await ticketinoService.GetEventInfos(client, eventOverview.id.ToString());
-                    EventInfo eventInfo = eventInfos.eventInfos.Find(p => p.languageIsoCode == "de");
+                    EventInfo eventInfo = eventInfos.eventInfos.Find(p => p.languageIsoCode == "de" || p.languageIsoCode == null);
                     
                     eventObject.eventDetails.eventInfos.Add(eventInfo);
                     eventDetails.Add(eventObject.eventDetails); 
@@ -131,14 +122,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
 
                     eventDetailsService.Upsert(eventObject.eventDetails.id, eventObject.eventDetails);
                     eventInfoService.Upsert(eventInfo.id, eventInfo);
-                }
-
-                var newEventGroupEventDetail = new EventGroupEventDetails(){
-                    eventGroupId = eventGroup.id,
-                    events = eventDetails
-                };
-
-                eventGroupEventDetailService.Create(newEventGroupEventDetail);
+                 }
             }
             return base.Ok();
         }

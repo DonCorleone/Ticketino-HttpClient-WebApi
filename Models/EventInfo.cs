@@ -5,12 +5,15 @@ namespace Kinderkultur_TicketinoClient.Models
 {
 // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
     public class EventInfo    {
+
+
+
         [JsonConverter(typeof(IntConverter))]
         public int id { get; set; } 
         [JsonConverter(typeof(StringConverter))]
         public string organizerName { get; set; } 
         [JsonConverter(typeof(StringConverter))]
-        public string eventName { get; set; } 
+        public string name { get; set; } 
         [JsonConverter(typeof(StringConverter))]
         public string shortDescription { get; set; } 
         [JsonConverter(typeof(StringConverter))]
