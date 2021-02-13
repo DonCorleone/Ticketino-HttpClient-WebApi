@@ -95,9 +95,14 @@ namespace Kinderkultur_TicketinoClient.Controllers
                     eventObject.eventDetails.eventInfos.Clear();
 
                     EventInfos eventInfos = await ticketinoService.GetEventInfos(client, eventOverview.id.ToString());
-                    EventInfo eventInfo = eventInfos.eventInfos.Find(p => p.languageIsoCode == "de" || p.languageIsoCode == null);
-                    
-                    eventObject.eventDetails.eventInfos.Add(eventInfo);
+                   // EventInfo eventInfo = eventInfos.eventInfos.Find(p => p.languageIsoCode == "de" || p.languageIsoCode == null);
+
+                    foreach (var eventInfo in eventInfos.eventInfos)
+                    {
+                        eventObject.eventDetails.eventInfos.Add(eventInfo);
+                        eventInfoService.Upsert(eventInfo.id, eventInfo);
+                    }
+
                     eventDetails.Add(eventObject.eventDetails); 
 
                     if(eventObject.eventDetails.facebookPixelId != ""){
@@ -121,7 +126,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
                     }
 
                     eventDetailsService.Upsert(eventObject.eventDetails.id, eventObject.eventDetails);
-                    eventInfoService.Upsert(eventInfo.id, eventInfo);
+
                  }
             }
             return base.Ok();
