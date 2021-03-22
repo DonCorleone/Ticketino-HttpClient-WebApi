@@ -23,7 +23,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
         private readonly IEventDetailsService eventDetailsService;
 
         public MergeController(
-            ITicketinoService ticketinoService, 
+            ITicketinoService ticketinoService,
             IEventGroupService eventGroupService,
             IEventGroupEventService eventGroupEventService,
             IEventEventGroupUsageService eventEventGroupUsageService,
@@ -48,86 +48,141 @@ namespace Kinderkultur_TicketinoClient.Controllers
 
             HttpClient client = new HttpClient();
 
-            var token = await ticketinoService.GetTokenAsync(client);
+            try
+            {
+                var token = await ticketinoService.GetTokenAsync(client);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("text/plain"));
 
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("text/plain"));
-
-            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token.access_token}");
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token.access_token}");
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
 
             var organizerz = await ticketinoService.GetOrganizers(client);
             var eventOverviews = await ticketinoService.GetEventGroupOverviews(client, organizerz[0].id.ToString());
-             
-            eventGroupService.RemoveAll();
-            eventGroupEventService.RemoveAll();
-            eventEventGroupUsageService.RemoveAll();
-            eventOverviewService.RemoveAll();        
-            eventService.RemoveAll();           
-                    
-            eventInfoService.RemoveAll();
-            eventDetailsService.RemoveAll();
+
+            try
+            {
+                eventGroupService.RemoveAll();
+                eventGroupEventService.RemoveAll();
+                eventEventGroupUsageService.RemoveAll();
+                eventOverviewService.RemoveAll();
+                eventService.RemoveAll();
+
+                eventInfoService.RemoveAll();
+                eventDetailsService.RemoveAll();
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
 
             foreach (var eventGroupOverview in eventOverviews.eventGroups)
             {
-                
                 EventGroup eventGroup = await ticketinoService.GetEventGroup(client, eventGroupOverview.id.ToString());
 
                 eventGroupService.Create(eventGroup);
-                
+
                 EventOverviewList eventOverviewList = await ticketinoService.GetEventOverviews(client, eventGroup.id.ToString());
 
-                EventGroupEvents newEventGroupEvent = new EventGroupEvents(){
-                    events = eventOverviewList.events,
-                    eventGroupId = eventGroup.id
-                };
+                try
+                {
+                    EventGroupEvents newEventGroupEvent = new EventGroupEvents()
+                    {
+                        events = eventOverviewList.events,
+                        eventGroupId = eventGroup.id
+                    };
 
-                eventGroupEventService.Create(newEventGroupEvent);
+                    eventGroupEventService.Create(newEventGroupEvent);
+                }
+                catch (System.Exception)
+                {
+
+                    throw;
+                }
 
                 var eventDetails = new List<EventDetails>();
 
                 foreach (var eventOverview in eventOverviewList.events)
                 {
+
                     eventOverviewService.Upsert(eventOverview.id, eventOverview);
 
-                    EventObject eventObject = await ticketinoService.GetEvent(client, eventOverview.id.ToString());
+                    EventDetails eventDetail = await ticketinoService.GetEvent(client, eventOverview.id.ToString());
 
-                    eventObject.eventDetails.eventInfos.Clear();
-
-                    EventInfos eventInfos = await ticketinoService.GetEventInfos(client, eventOverview.id.ToString());
-                   // EventInfo eventInfo = eventInfos.eventInfos.Find(p => p.languageIsoCode == "de" || p.languageIsoCode == null);
-
-                    foreach (var eventInfo in eventInfos.eventInfos)
+                    try
                     {
-                        eventObject.eventDetails.eventInfos.Add(eventInfo);
-                        eventInfoService.Upsert(eventInfo.id, eventInfo);
+                        eventDetail.eventInfos.Clear();
+                    }
+                    catch (System.Exception)
+                    {
+
+                        throw;
                     }
 
-                    eventDetails.Add(eventObject.eventDetails); 
+                    try
+                    {
 
-                    if(eventObject.eventDetails.facebookPixelId != ""){
-                        var eventGroupUsage = new EventEventGroupUsage(){
-                            eventId = eventObject.eventDetails.id,
-                            eventGroupId = eventGroup.id,
-                            usage = eventObject.eventDetails.facebookPixelId
-                        };
+                        EventInfos eventInfos = await ticketinoService.GetEventInfos(client, eventOverview.id.ToString());
+                        // EventInfo eventInfo = eventInfos.eventInfos.Find(p => p.languageIsoCode == "de" || p.languageIsoCode == null);
 
-                        eventEventGroupUsageService.Create(eventGroupUsage);
+                        foreach (var eventInfo in eventInfos.eventInfos)
+                        {
+                            eventDetail.eventInfos.Add(eventInfo);
+                            eventInfoService.Upsert(eventInfo.id, eventInfo);
+                        }
+                    }
+                    catch (System.Exception)
+                    {
+                        throw;
                     }
 
-                    if(eventObject.eventDetails.googleAnalyticsTracker != ""){
-                        var eventGroupUsage = new EventEventGroupUsage(){
-                            eventId = eventObject.eventDetails.id,
-                            eventGroupId = eventGroup.id,
-                            usage = eventObject.eventDetails.googleAnalyticsTracker
-                        };
+                    eventDetails.Add(eventDetail);
 
-                        eventEventGroupUsageService.Create(eventGroupUsage);
+                    try
+                    {
+                        if (eventDetail.facebookPixelId != "")
+                        {
+                            var eventGroupUsage = new EventEventGroupUsage()
+                            {
+                                eventId = eventDetail.id,
+                                eventGroupId = eventGroup.id,
+                                usage = eventDetail.facebookPixelId
+                            };
+
+                            eventEventGroupUsageService.Create(eventGroupUsage);
+                        }
+                    }
+                    catch (System.Exception)
+                    {
+                        throw;
                     }
 
-                    eventDetailsService.Upsert(eventObject.eventDetails.id, eventObject.eventDetails);
+                    if (eventDetail.googleAnalyticsTracker != "")
+                    {
+                        try
+                        {
+                            var eventGroupUsage = new EventEventGroupUsage()
+                            {
+                                eventId = eventDetail.id,
+                                eventGroupId = eventGroup.id,
+                                usage = eventDetail.googleAnalyticsTracker
+                            };
 
-                 }
+                            eventEventGroupUsageService.Create(eventGroupUsage);
+                        }
+                        catch (System.Exception)
+                        {
+                            throw;
+                        }
+
+                    }
+                    eventDetailsService.Upsert(eventDetail.id, eventDetail);
+                }
             }
             return base.Ok();
         }

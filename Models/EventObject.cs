@@ -81,9 +81,9 @@ namespace Kinderkultur_TicketinoClient.Models
         [JsonConverter(typeof(IntConverter))]
         public int sortOrder { get; set; } 
         [JsonConverter(typeof(DateConverter))]
-        public DateTime presaleStart { get; set; } 
+        public DateTime preSaleStart { get; set; } 
         [JsonConverter(typeof(DateConverter))]
-        public DateTime presaleEnd { get; set; } 
+        public DateTime preSaleEnd { get; set; } 
         [JsonConverter(typeof(DateConverter))]
         public DateTime openDoor { get; set; } 
         [JsonConverter(typeof(DateConverter))]
