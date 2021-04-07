@@ -13,11 +13,12 @@ namespace Kinderkultur_TicketinoClient.Models
         public int id { get; set; } 
         public string name { get; set; } 
         public DateTime dateCreated { get; set; } 
+        public int organizerId { get; set; }
     }
 
-    public class EventGroupOverviewList    {
-        public List<EventGroupOverview> eventGroups { get; set; } 
-        public int numberOfEventGroups { get; set; } 
-        public bool canCrudEventGroups { get; set; } 
-    }
+    // public class EventGroupOverviewList    {
+    //     public List<EventGroupOverview> eventGroups { get; set; } 
+    //     public int numberOfEventGroups { get; set; } 
+    //     public bool canCrudEventGroups { get; set; } 
+    // }
 }

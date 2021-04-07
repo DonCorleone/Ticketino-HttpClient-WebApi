@@ -48,11 +48,11 @@ namespace Kinderkultur_TicketinoClient.Services
             return await BaseUrlCaller<IList<Organizer>>.GetFromBaseUrl(configuration, client, url);
         }
 
-        public async Task<EventGroupOverviewList> GetEventGroupOverviews(HttpClient client, string organizerId)
+        public async Task<IList<EventGroupOverview>> GetEventGroupOverviews(HttpClient client, string organizerId)
         {        
             var url = "/EventGroups?organizerId=" + organizerId;
 
-            return await BaseUrlCaller<EventGroupOverviewList>.GetFromBaseUrl(configuration, client, url);
+            return await BaseUrlCaller<IList<EventGroupOverview>>.GetFromBaseUrl(configuration, client, url);
         }
 
         public async Task<EventGroup> GetEventGroup(HttpClient client, string eventGroupId)

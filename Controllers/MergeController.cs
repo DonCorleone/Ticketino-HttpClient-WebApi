@@ -81,7 +81,7 @@ namespace Kinderkultur_TicketinoClient.Controllers
                 throw;
             }
 
-            foreach (var eventGroupOverview in eventOverviews.eventGroups)
+            foreach (var eventGroupOverview in eventOverviews)
             {
                 EventGroup eventGroup = await ticketinoService.GetEventGroup(client, eventGroupOverview.id.ToString());
 
