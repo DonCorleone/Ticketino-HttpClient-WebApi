@@ -29,13 +29,7 @@ namespace Kinderkultur_TicketinoClient
 
             services.AddSingleton<IEventDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<EventDatabaseSettings>>().Value);
-             
-            services.AddSingleton<IEventGroupService, EventGroupService>();
-            services.AddSingleton<IEventGroupEventService, EventGroupEventService>();   
-            services.AddSingleton<IEventEventGroupUsageService, EventEventGroupUsageService>();   
-            services.AddSingleton<IEventOverviewService, EventOverviewService>();        
-            services.AddSingleton<IEventService, EventService>();          
-            services.AddSingleton<IEventInfoService, EventInfoService>();       
+                 
             services.AddSingleton<IEventDetailsService, EventDetailsService>(); 
 
             services.AddControllers();
