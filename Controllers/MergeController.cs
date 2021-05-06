@@ -28,7 +28,6 @@ namespace Kinderkultur_TicketinoClient.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAsync()
         {
-
             HttpClient client = new HttpClient();
 
             try
@@ -47,22 +46,16 @@ namespace Kinderkultur_TicketinoClient.Controllers
 
             try
             {
-
                 var organizerz = await ticketinoService.GetOrganizers(client);
                 var eventOverviews = await ticketinoService.GetEventIdDistributors(client, organizerz[0].id.ToString());
 
-                var events = eventOverviews.events;
-                foreach (var eventOverview in events)
+                foreach (var eventOverview in eventOverviews.events)
                 {
-
                     EventDetails eventDetail = await ticketinoService.GetEvent(client, eventOverview.id.ToString());
-
                     eventDetailsService.Upsert(eventDetail.id, eventDetail);
-
                 }
 
                 return base.Ok();
-
             }
             catch (System.Exception ex)
             {
