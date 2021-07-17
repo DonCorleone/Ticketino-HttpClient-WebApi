@@ -47,12 +47,17 @@ namespace Kinderkultur_TicketinoClient.Controllers
             try
             {
                 var organizerz = await ticketinoService.GetOrganizers(client);
-                var eventOverviews = await ticketinoService.GetEventIdDistributors(client, organizerz[0].id.ToString());
+                var eventOverviews = await ticketinoService.GetEventGroupOverviews(client, organizerz[0].id.ToString());
 
-                foreach (var eventOverview in eventOverviews.events)
+                foreach (var eventGroupOverview in eventOverviews)
                 {
-                    EventDetails eventDetail = await ticketinoService.GetEvent(client, eventOverview.id.ToString());
-                    eventDetailsService.Upsert(eventDetail.id, eventDetail);
+                    EventOverviewList eventOverviewList = await ticketinoService.GetEventOverviews(client, eventGroupOverview.id.ToString());  
+
+                    foreach (var eventOverview in eventOverviewList.events)
+                    {
+                        EventDetails eventDetail = await ticketinoService.GetEvent(client, eventOverview.id.ToString());
+                        eventDetailsService.Upsert(eventDetail.id, eventDetail);
+                    }
                 }
 
                 return base.Ok();

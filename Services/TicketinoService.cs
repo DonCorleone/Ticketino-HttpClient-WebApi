@@ -56,6 +56,20 @@ namespace Kinderkultur_TicketinoClient.Services
 
             return await BaseUrlCaller<EventIdDistributors>.GetFromBaseUrl(configuration, client, url);
         }
+        public async Task<IList<EventGroupOverview>> GetEventGroupOverviews(HttpClient client, string organizerId)
+        {        
+            var url = "/EventGroups?organizerId=" + organizerId;
+
+            return await BaseUrlCaller<IList<EventGroupOverview>>.GetFromBaseUrl(configuration, client, url);
+        }
+
+        public async Task<EventOverviewList> GetEventOverviews(HttpClient client, string eventGroupId)
+        {           
+            var url = $"/EventGroup/Events?eventGroupId={eventGroupId}&languageCode=de";
+
+            return await BaseUrlCaller<EventOverviewList>.GetFromBaseUrl(configuration, client, url);
+        }
+
 
         public async Task<EventDetails> GetEvent(HttpClient client, string eventId)
         {
