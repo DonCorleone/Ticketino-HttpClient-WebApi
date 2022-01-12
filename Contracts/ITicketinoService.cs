@@ -10,10 +10,9 @@ namespace Kinderkultur_TicketinoClient.Contracts
     {
         Task<Token> GetTokenAsync(HttpClient client);
         Task<IList<Organizer>> GetOrganizers(HttpClient client);
-        Task<IList<EventGroupOverview>> GetEventGroupOverviews(HttpClient client, string organizerId);
-        Task<EventGroup> GetEventGroup(HttpClient client, string eventGroupId);
-        Task<EventOverviewList> GetEventOverviews(HttpClient client, string eventGroupId);
+        Task<EventIdDistributors> GetEventIdDistributors(HttpClient client, string organizerId);
         Task<EventDetails> GetEvent(HttpClient client, string eventId);
-        Task<EventInfos> GetEventInfos(HttpClient client, string eventId);
+        Task<IList<EventGroupOverview>> GetEventGroupOverviews(HttpClient client, string organizerId);
+        Task<EventOverviewList> GetEventOverviews(HttpClient client, string eventGroupId);
     }
 }
