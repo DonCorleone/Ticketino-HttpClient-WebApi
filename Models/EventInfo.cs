@@ -59,4 +59,14 @@ namespace Kinderkultur_TicketinoClient.Models
         public bool isEditable { get; set; } 
         public List<EventInfo> eventInfos { get; set; } 
     }
+
+    public class TicketTypes
+    {
+        public List<TicketType> ticketTypes { get; set; } 
+    }
+
+    public class TicketTypeInfos
+    {
+        public List<TicketTypeInfo> ticketTypeInfos { get; set; } 
+    }
 }
