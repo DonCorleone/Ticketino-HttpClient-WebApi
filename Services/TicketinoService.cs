@@ -56,6 +56,21 @@ namespace Kinderkultur_TicketinoClient.Services
 
             return await BaseUrlCaller<EventIdDistributors>.GetFromBaseUrl(configuration, client, url);
         }
+
+        public async Task<EventInfos> GetEventInfos(HttpClient client, string eventId)
+        {
+            var url = $"/Event/" + eventId + "/Infos";
+
+            return await BaseUrlCaller<EventInfos>.GetFromBaseUrl(configuration, client, url);
+        }
+
+        public async Task<TicketTypes> GetTicketTypes(HttpClient client, string eventId)
+        {
+            var url = $"/Event/" + eventId + "/TicketTypes";;
+
+            return await BaseUrlCaller<TicketTypes>.GetFromBaseUrl(configuration, client, url);
+        }
+
         public async Task<IList<EventGroupOverview>> GetEventGroupOverviews(HttpClient client, string organizerId)
         {        
             var url = "/EventGroups?organizerId=" + organizerId;
@@ -68,6 +83,15 @@ namespace Kinderkultur_TicketinoClient.Services
             var url = $"/EventGroup/Events?eventGroupId={eventGroupId}&languageCode=de";
 
             return await BaseUrlCaller<EventOverviewList>.GetFromBaseUrl(configuration, client, url);
+        }
+
+        public async Task<TicketTypeInfos> GetTicketTypeInfos(HttpClient client, string ticketTypeId)
+        {
+            var url = $"/TicketType/" + ticketTypeId + "/Infos";;
+
+            return await BaseUrlCaller<TicketTypeInfos>.GetFromBaseUrl(configuration, client, url);
+            
+            //// /TicketType/{ticketTypeId}/Infos
         }
 
 

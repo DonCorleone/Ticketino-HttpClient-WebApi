@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Kinderkultur_TicketinoClient.Contracts;
 using Kinderkultur_TicketinoClient.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 
 namespace Kinderkultur_TicketinoClient.Controllers
 {
@@ -56,6 +58,23 @@ namespace Kinderkultur_TicketinoClient.Controllers
                     foreach (var eventOverview in eventOverviewList.events)
                     {
                         EventDetails eventDetail = await ticketinoService.GetEvent(client, eventOverview.id.ToString());
+
+                        EventInfos eventInfos =
+                            await ticketinoService.GetEventInfos(client, eventOverview.id.ToString());
+                        
+                        eventDetail.eventInfos = eventInfos.eventInfos;
+
+                        TicketTypes ticketTypes =
+                            await ticketinoService.GetTicketTypes(client, eventOverview.id.ToString());
+                        
+                        foreach (TicketType ticketType in ticketTypes.ticketTypes)
+                        {
+                            var ticketTypeInfos = await ticketinoService.GetTicketTypeInfos(client, ticketType.id.ToString());
+                            ticketType.ticketTypeInfos = ticketTypeInfos.ticketTypeInfos;
+                        }
+                        
+                        eventDetail.ticketTypes = ticketTypes.ticketTypes;
+                        
                         eventDetailsService.Upsert(eventDetail.id, eventDetail);
                     }
                 }
