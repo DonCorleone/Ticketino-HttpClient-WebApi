@@ -28,7 +28,6 @@ namespace Kinderkultur_TicketinoClient.Services
                 new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencode"));
 
             var url = configuration.GetValue<String>("token_Url");
-
             var dict = new List<KeyValuePair<string, string>>();
             dict.Add(new KeyValuePair<string, string>("grant_type", "password"));
             dict.Add(new KeyValuePair<string, string>("username", configuration["ticketino-auth:username"]));
