@@ -17,8 +17,11 @@ namespace Kinderkultur_TicketinoClient.Services
 
         public EventDetailsService(IEventDatabaseSettings settings, IConfiguration configuration)
         {
+            var mongoDbPassword = 
+                configuration.GetValue<string>("mongo-db-auth:password");
+            ;
             // local var client = new MongoClient($"mongodb://{configuration["mongodb-username"]}:{configuration["mongodb-password"]}@192.168.178.12:27017");
-            var client = new MongoClient($"mongodb+srv://ticketinoClient:9sdQuDmQwnvbla4j@cluster0.x3l7f.mongodb.net/{settings.DatabaseName}?retryWrites=true&w=majority");
+            var client = new MongoClient($"mongodb+srv://ticketinoClient:{mongoDbPassword}@cluster0.x3l7f.mongodb.net/{settings.DatabaseName}?retryWrites=true&w=majority");
          
             var database = client.GetDatabase(settings.DatabaseName);
 
