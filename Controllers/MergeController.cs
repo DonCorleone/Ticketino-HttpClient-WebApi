@@ -59,9 +59,24 @@ namespace Kinderkultur_TicketinoClient.Controllers
                     {
                         EventDetails eventDetail = await ticketinoService.GetEvent(client, eventOverview.id.ToString());
 
+                        LocationInfo locationInfo = null;
+                        if (eventDetail.locationId > 0)
+                        {
+                            LocationInfos locationInfos = await ticketinoService.GetLocationInfos(client, eventDetail.locationId.ToString());
+                            locationInfo = locationInfos.locationInfos.First(p => p.languageId == 0);
+                        }
+                        
+                        
                         EventInfos eventInfos =
                             await ticketinoService.GetEventInfos(client, eventOverview.id.ToString());
-                        
+
+                        if (locationInfo != null && !string.IsNullOrEmpty(locationInfo.name))
+                        {
+                            foreach (var eventInfo in eventInfos.eventInfos)
+                            {
+                                eventInfo.location = locationInfo.name;
+                            }
+                        }
                         eventDetail.eventInfos = eventInfos.eventInfos;
 
                         TicketTypes ticketTypes =

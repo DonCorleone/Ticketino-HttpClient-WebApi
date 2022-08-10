@@ -93,6 +93,13 @@ namespace Kinderkultur_TicketinoClient.Services
             //// /TicketType/{ticketTypeId}/Infos
         }
 
+        public async Task<LocationInfos> GetLocationInfos(HttpClient client, string locationId)
+        {
+            var url = $"/Location/{locationId}/Infos";
+
+            return await BaseUrlCaller<LocationInfos>.GetFromBaseUrl(configuration, client, url);
+        }
+
 
         public async Task<EventDetails> GetEvent(HttpClient client, string eventId)
         {

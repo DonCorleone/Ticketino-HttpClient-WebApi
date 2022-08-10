@@ -16,6 +16,7 @@ namespace Kinderkultur_TicketinoClient.Contracts
         Task<TicketTypes> GetTicketTypes(HttpClient client, string eventId);
         Task<IList<EventGroupOverview>> GetEventGroupOverviews(HttpClient client, string organizerId);
         Task<EventOverviewList> GetEventOverviews(HttpClient client, string eventGroupId);
-        Task<TicketTypeInfos> GetTicketTypeInfos(HttpClient client, string ticketTypeId); 
+        Task<TicketTypeInfos> GetTicketTypeInfos(HttpClient client, string ticketTypeId);
+        Task<LocationInfos> GetLocationInfos(HttpClient client, string locationId);
     }
 }

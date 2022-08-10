@@ -59,6 +59,66 @@ namespace Kinderkultur_TicketinoClient.Models
         public bool isEditable { get; set; } 
         public List<EventInfo> eventInfos { get; set; } 
     }
+    
+    public class LocationInfos
+    {
+        public List<LocationInfo> locationInfos { get; set; } 
+    }
+
+    // Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);
+    public class LocationInfo
+    {
+        [JsonConverter(typeof(IntConverter))]
+        public int id { get; set; }
+
+        [JsonConverter(typeof(StringConverter))]
+        public string bannerImagePath { get; set; }
+
+        [JsonConverter(typeof(StringConverter))]
+        public string logoImagePath { get; set; }
+
+        [JsonConverter(typeof(IntConverter))]
+        public int locationId { get; set; }
+
+        [JsonConverter(typeof(IntConverter))]
+        public int languageId { get; set; }
+
+        [JsonConverter(typeof(StringConverter))]
+        public string name { get; set; }
+
+        [JsonConverter(typeof(StringConverter))]
+        public string description { get; set; }
+
+        [JsonConverter(typeof(StringConverter))]
+        public string street { get; set; }
+
+        [JsonConverter(typeof(StringConverter))]
+        public string streetNumber { get; set; }
+
+        [JsonConverter(typeof(StringConverter))]
+        public string postalCode { get; set; }
+
+        [JsonConverter(typeof(StringConverter))]
+        public string city { get; set; }
+
+        [JsonConverter(typeof(StringConverter))]
+        public string url { get; set; }
+
+        [JsonConverter(typeof(StringConverter))]
+        public string urlGoogleMap { get; set; }
+
+        [JsonConverter(typeof(StringConverter))]
+        public string bannerImage { get; set; }
+
+        [JsonConverter(typeof(StringConverter))]
+        public string logoImage { get; set; }
+
+        [JsonConverter(typeof(StringConverter))]
+        public string routeDescription { get; set; }
+
+        [JsonConverter(typeof(StringConverter))]
+        public string openingHours { get; set; }
+    }
 
     public class TicketTypes
     {
